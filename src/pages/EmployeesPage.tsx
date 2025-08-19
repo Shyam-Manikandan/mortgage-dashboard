@@ -1,6 +1,6 @@
 import  { useMemo, useRef, useState } from "react";
 import "../App.css";
-import { lendersEmployeesData } from "../Datastore";
+import { lendersEmployeesData } from "../Data/Datastore";
 
 
 import { AgGridReact } from "ag-grid-react";

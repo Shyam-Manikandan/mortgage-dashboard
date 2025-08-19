@@ -1,0 +1,51 @@
+.amortization-schedule td,
+.amortization-schedule th {
+  border-bottom: 1px solid #e0e0e0;
+  color: #0d2121;
+  display: table-cell;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: .2px;
+  line-height: 24px;
+  text-align: left;
+  text-transform: none;
+  vertical-align: inherit;
+  line-height: 1.2;
+  height: 20px;
+  font-size: 10px;
+  align-content: center;
+}
+
+.amortization-schedule th {
+  font-weight: 700;
+}
+
+.amortization-schedule td {
+  height: 25px;
+}
+
+.amortization-schedule thead {
+  background-color: #fff;
+  position: sticky;
+  top: -15px;
+  z-index: 26
+}
+
+.amortization-schedule {
+  width: 100%;
+  table-layout: fixed;
+  font-size: 11px;
+}
+
+.cds--popover-content:has(.tooltip-apr-container) {
+  min-width: 450px;
+}
+
+.amortization-schedule .row-container {
+  height: 30px;
+}
+
+.amortization-schedule .collapsible-row {
+  padding: 2px 4px;
+  font-size: 10px;
+}

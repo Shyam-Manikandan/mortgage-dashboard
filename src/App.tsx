@@ -1,8 +1,12 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import LendersPage from "./pages/LendersPage";
 import EmployeesPage from "./pages/EmployeesPage";
+import AmortizationSchedule from "./pages/AmortizationSchedule";
+import amortizationScheduleData from "./Data/amortizationScheduleData.json";
 
 function App() {
+
+  const aprValue= 5.0;
   return (
     <Router>
       <div className="layout">
@@ -20,6 +24,11 @@ function App() {
                 Lenders & Employees
               </Link>
             </li>
+            <li>
+              <Link to="/schedule" className="block py-2 px-3 rounded hover:bg-slate-700">
+                Amortization Schedule
+              </Link>
+            </li>
           </ul>
         </aside>
 
@@ -28,6 +37,9 @@ function App() {
           <Routes>
             <Route path="/" element={<LendersPage />} />
             <Route path="/employees" element={<EmployeesPage />} />
+            <Route path="/schedule" 
+            element={<AmortizationSchedule amortizationSchedule={amortizationScheduleData} aprValue={aprValue}
+            />} />
           </Routes>
         </main>
       </div>
