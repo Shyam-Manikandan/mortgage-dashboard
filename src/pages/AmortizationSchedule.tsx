@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment} from "react";
+import { useState, useEffect, Fragment, useMemo} from "react";
 import type { ReactNode } from "react";
 import { ChevronUp, ChevronDown } from "@carbon/icons-react";
 import { ContentSwitcher, Switch } from "@carbon/react";
@@ -7,7 +7,7 @@ import {
   formatPercentage,
 } from "../utils/formatFunctions";
 import "../pages/amortization-schedule.css";
-import { findBreakPoint } from "../utils/findbreakpoint";
+
 
 export interface AmortizationPayment {
   paymentNumber: number;
@@ -29,19 +29,18 @@ const AmortizationSchedule: React.FC<AmortizationScheduleProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [tableData, setTableData] = useState<AmortizationPayment[]>([]);
-  const [breakPoint, setBreakPoint] = useState<number | null>(null);
+ 
+  const breakPoint = useMemo(
+    () => findBreakPoint(amortizationSchedule)
+    ,[amortizationSchedule]);
+    
 
 
   useEffect(() => {
     if (!amortizationSchedule || amortizationSchedule.length === 0) {
       setTableData([]);
-      setBreakPoint(null);
       return;
     }
-
-    useMemo(() => setBreakPoint(findBreakPoint(amortizationSchedule));, [items]);
-    
-    
     
     if (activeTab === 0) {
       const yearlyData: AmortizationPayment[] = [];
@@ -124,7 +123,7 @@ const AmortizationSchedule: React.FC<AmortizationScheduleProps> = ({
                     {payment.childRows?.map((row) => (
                       <tr key={row.paymentNumber} 
                       className={row.paymentNumber === breakPoint ? "bg-gray-300":""}>
-                        <td className="text-center" >{row.paymentNumber}</td>
+                        <td className="text-center pl-3">{row.paymentNumber}</td>
                         <td>{formatCurrency(row.Amount, 0)}</td>
                         <td>{formatCurrency(row.Interest, 0)}</td>
                         <td>{formatCurrency(row.Principal, 0)}</td>
@@ -135,7 +134,7 @@ const AmortizationSchedule: React.FC<AmortizationScheduleProps> = ({
                 ) : (
                   <tr key={payment.paymentNumber} 
                   className={payment.paymentNumber === breakPoint ? "bg-gray-300":""} >
-                    <td className="text-center px-12px">{payment.paymentNumber}</td>
+                    <td className="text-center">{payment.paymentNumber}</td>
                     <td>{formatCurrency(payment.Amount, 0)}</td>
                     <td>{formatCurrency(payment.Interest, 0)}</td>
                     <td>{formatCurrency(payment.Principal, 0)}</td>
@@ -178,6 +177,10 @@ const CollapsibleRow: React.FC<CollapsibleRowProps> = ({
           <div className="flex items-center font-bold gap-1.5">
             {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
             <span>Year {payment.paymentNumber}</span>
+            <span>Total amount Paid: {formatCurrency(payment.Amount, 0)}</span>
+            <span>Total Interest: {formatCurrency(payment.Interest, 0)}</span>
+            <span>Total Principal: {formatCurrency(payment.Principal, 0)}</span>
+            <span>Current Balance: {formatCurrency(payment.Balance, 0)}</span>
           </div>
         </td>
       </tr>
@@ -185,5 +188,15 @@ const CollapsibleRow: React.FC<CollapsibleRowProps> = ({
     </>
   );
 };
+
+function findBreakPoint(schedule: AmortizationPayment[]): number | null{
+    for (const payment of schedule){
+        if(payment.Principal > payment.Interest){
+            return payment.paymentNumber;
+        }
+    }
+    return null;
+}
+
 
 export default AmortizationSchedule;
